@@ -1,0 +1,17 @@
+Ideii proiect CAVA
+
+1. Extragerea careului trebuie sa fie foarte buna
+	-Profitam de WARP image
+	-Profitam ca nu vom avea prea mult zgomot
+	-Filtru de Blur maybe
+	-Stim ca tabla e intr-o anumita zona deci e 
+posibil sa scapam de o parte liniile provocate de masa
+	-Filtrarea culorilor poate ajuta foarte mult
+	-Filtrarea culorilor poate ajuta si la verificarea
+daca o litera apare sau nu pe un patrat
+
+2.Recunoasterea literelor
+	-Template matching dar trebuie sa fie calibrat
+	-template-urile date nu sunt intodeauan cele mai bune
+3.Cazuri speciale
+	-Piesele nu sunt centrate perfect 
