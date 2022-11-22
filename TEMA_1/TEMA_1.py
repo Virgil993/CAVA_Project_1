@@ -135,30 +135,34 @@ def vizualizare_configuratie(result,matrix,lines_horizontal,lines_vertical):
             if matrix[i][j] == 'x': 
                 cv.rectangle(result, (y_min, x_min), (y_max, x_max), color=(255, 0, 0), thickness=5)
 
+alfabet = ["A","B","C","D","E","F","G","H","I","J","L","M","N","O","P","R","S","T","U","V","X","Z","0"]
+nr2 = len(alfabet)
+for j in range(nr2):
+    alfabet.append(alfabet[j]+"2")
+
 def memoreaza_templates(img_hsv,img):
     index = 0
     for i in range(len(lines_horizontal)-1):
         for j in range(len(lines_vertical)-1):
-            y_min = lines_vertical[j][0][0]+5
-            y_max = lines_vertical[j + 1][1][0]-5
-            x_min = lines_horizontal[i][0][1]+5
-            x_max = lines_horizontal[i + 1][1][1]-5
+            nr = 4
+            y_min = lines_vertical[j][0][0]+nr
+            y_max = lines_vertical[j + 1][1][0]-nr
+            x_min = lines_horizontal[i][0][1]+nr
+            x_max = lines_horizontal[i + 1][1][1]-nr
             patch = img_hsv[x_min:x_max, y_min:y_max].copy()
             patch_org = img[x_min:x_max, y_min:y_max].copy()
             # show_image("mask_hsv",patch)
             Medie_patch=np.mean(patch)
             if Medie_patch>8:
-                current_letter = ord("A")+index
-                current_letter = str(chr(current_letter))
-                filename = current_letter+".jpg"
+                filename = alfabet[index]+".jpg"
                 index +=1
                 cv.imwrite("G:\GitHub Repositories\CAVA_Project_1\TEMA_1\\templates\\"+filename,patch_org)
-
     return
 
 files=os.listdir("G:\GitHub Repositories\CAVA_Project_1\TEMA_1\\antrenare")
 for file in files:
     if file[-3:]=='jpg':
+        break
         img = cv.imread("G:\GitHub Repositories\CAVA_Project_1\TEMA_1\\antrenare\\"+file)
         result=extrage_careu(img)
         low_yellow = (0, 0, 239)
@@ -175,10 +179,68 @@ for file in files:
 
 
 
-img = cv.imread("G:\GitHub Repositories\CAVA_Project_1\TEMA_1\imagini_auxiliare\litere_1.jpg")
-result=extrage_careu(img)
-low_yellow = (0, 0, 239)
-high_yellow = (255, 111, 255)
-img_hsv = cv.cvtColor(result.copy(), cv.COLOR_BGR2HSV)
-mask_yellow_hsv = cv.inRange(img_hsv, low_yellow, high_yellow)
-memoreaza_templates(mask_yellow_hsv,result)
+# img = cv.imread("G:\GitHub Repositories\CAVA_Project_1\TEMA_1\imagini_auxiliare\litere_1.jpg")
+# result=extrage_careu(img)
+# low_yellow = (0, 0, 239)
+# high_yellow = (255, 111, 255)
+# img_hsv = cv.cvtColor(result.copy(), cv.COLOR_BGR2HSV)
+# mask_yellow_hsv = cv.inRange(img_hsv, low_yellow, high_yellow)
+# memoreaza_templates(mask_yellow_hsv,result)
+
+
+
+def clasifica_litera(patch):
+        maxi=-np.inf
+        litera=""
+        # show_image("patch",patch)
+        patch = cv.cvtColor(patch.copy(),cv.COLOR_BGR2GRAY)
+        for j in alfabet:
+            img_template=cv.imread('G:\GitHub Repositories\CAVA_Project_1\TEMA_1\\templates\\'+j+'.jpg')
+            img_template= cv.cvtColor(img_template,cv.COLOR_BGR2GRAY)
+            # show_image("temp",img_template)
+            corr = cv.matchTemplate(patch,img_template,  cv.TM_CCOEFF_NORMED)
+            corr=np.max(corr)
+            if corr>maxi :
+                maxi=corr
+                litera=j
+        return litera
+
+def determina_configuratie_careu_olitere(img_hsv,lines_horizontal,lines_vertical,img_original):
+    matrix = np.empty((15,15), dtype='str')
+    # show_image("mask_hsv",img_hsv)
+    for i in range(len(lines_horizontal)-1):
+        for j in range(len(lines_vertical)-1):
+            y_min = lines_vertical[j][0][0]+5
+            y_max = lines_vertical[j + 1][1][0]-5
+            x_min = lines_horizontal[i][0][1]+5
+            x_max = lines_horizontal[i + 1][1][1]-5
+            patch = img_hsv[x_min:x_max, y_min:y_max].copy()
+            y_min = lines_vertical[j][0][0]+8
+            y_max = lines_vertical[j + 1][1][0]-8
+            x_min = lines_horizontal[i][0][1]+8
+            x_max = lines_horizontal[i + 1][1][1]-8
+            patch_original = img_original[x_min:x_max, y_min:y_max].copy()
+            # show_image("mask_hsv",patch)
+            Medie_patch=np.mean(patch)
+            if Medie_patch>8:
+                matrix[i][j]=clasifica_litera(patch_original)
+            else:
+                matrix[i][j]="o"
+    return matrix
+
+matrice_viz= np.zeros((15,15), dtype='int')
+files=os.listdir("G:\GitHub Repositories\CAVA_Project_1\TEMA_1\\antrenare")
+for file in files:
+    if file[-3:]=='jpg':
+        img = cv.imread("G:\GitHub Repositories\CAVA_Project_1\TEMA_1\\antrenare\\"+file)
+        result=extrage_careu(img)
+        low_yellow = (0, 0, 239)
+        high_yellow = (255, 111, 255)
+        img_hsv = cv.cvtColor(result.copy(), cv.COLOR_BGR2HSV)
+        mask_yellow_hsv = cv.inRange(img_hsv, low_yellow, high_yellow)
+        matrice=determina_configuratie_careu_olitere(mask_yellow_hsv,lines_horizontal,lines_vertical,result)
+        # print(matrice)
+        # show_image('img',result)
+
+
+
