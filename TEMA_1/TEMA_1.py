@@ -228,9 +228,9 @@ def determina_configuratie_careu_olitere(img_hsv,lines_horizontal,lines_vertical
                 matrix[i][j]="o"
     return matrix
 
-matrice_viz= np.zeros((15,15), dtype='int')
 files=os.listdir("G:\GitHub Repositories\CAVA_Project_1\TEMA_1\\antrenare")
 for file in files:
+    break
     if file[-3:]=='jpg':
         img = cv.imread("G:\GitHub Repositories\CAVA_Project_1\TEMA_1\\antrenare\\"+file)
         result=extrage_careu(img)
@@ -242,5 +242,75 @@ for file in files:
         # print(matrice)
         # show_image('img',result)
 
+matrice_punctaje =[
+    [5,1,1,2,1,1,1,5,1,1,1,2,1,1,5],
+    [1,4,1,1,1,3,1,1,1,3,1,1,1,4,1],
+    [1,1,4,1,1,1,2,1,2,1,1,1,4,1,1],
+    [2,1,1,4,1,1,1,2,1,1,1,4,1,1,2],
+    [1,1,1,1,4,1,1,1,1,1,4,1,1,1,1],
+    [1,3,1,1,1,3,1,1,1,3,1,1,1,3,1],
+    [1,1,2,1,1,1,2,1,2,1,1,1,2,1,1],
+    [5,1,1,2,1,1,1,4,1,1,1,2,1,1,5],
+    [1,1,2,1,1,1,2,1,2,1,1,1,2,1,1],
+    [1,3,1,1,1,3,1,1,1,3,1,1,1,3,1],
+    [1,1,1,1,4,1,1,1,1,1,4,1,1,1,1],
+    [2,1,1,4,1,1,1,2,1,1,1,4,1,1,2],
+    [1,1,4,1,1,1,2,1,2,1,1,1,4,1,1],
+    [1,4,1,1,1,3,1,1,1,3,1,1,1,4,1],
+    [5,1,1,2,1,1,1,5,1,1,1,2,1,1,5],
+]
 
+dictionar_poz_litera = {}
+for i in range(15):
+    dictionar_poz_litera[i+1]=chr(ord('A')+i)
+
+print(dictionar_poz_litera)
+
+
+matrice_viz = np.zeros((15,15),dtype=int)
+lista_rezultate = []
+files=os.listdir("G:\GitHub Repositories\CAVA_Project_1\TEMA_1\\antrenare")
+game_nr= 1
+for file in files:
+    if file[-3:]=='jpg':
+        if(file[-6:] == "01.jpg"):
+            matrice_viz = np.zeros((15,15),dtype=int)
+            if(len(lista_rezultate)!=0):
+                for i in range(len(lista_rezultate)):
+                    if i >=0 and i <=8:
+                        file_writer = open("G:\GitHub Repositories\CAVA_Project_1\TEMA_1\solutii_proprii\\"+str(game_nr)+"_0"+str(i+1)+".txt","w")
+                    else:
+                        file_writer = open("G:\GitHub Repositories\CAVA_Project_1\TEMA_1\solutii_proprii\\"+str(game_nr)+"_"+str(i+1)+".txt","w")
+                    for element in lista_rezultate[i]:
+                        file_writer.write(element+"\n")
+                    file_writer.close
+            lista_rezultate = []
+        # if(file[-6:] == "20.jpg"):
+        #     break
+        lista_runda = []
+        img = cv.imread("G:\GitHub Repositories\CAVA_Project_1\TEMA_1\\antrenare\\"+file)
+        result=extrage_careu(img)
+        low_yellow = (0, 0, 239)
+        high_yellow = (255, 111, 255)
+        img_hsv = cv.cvtColor(result.copy(), cv.COLOR_BGR2HSV)
+        mask_yellow_hsv = cv.inRange(img_hsv, low_yellow, high_yellow)
+        matrice=determina_configuratie_careu_olitere(mask_yellow_hsv,lines_horizontal,lines_vertical,result)
+        for i in range(15):
+            for j in range(15):
+                if(matrice[i][j]!='o'):
+                    if(matrice_viz[i][j]==0):
+                        matrice_viz[i][j]=1
+                        lista_runda.append(str(i+1)+dictionar_poz_litera[j+1]+" "+matrice[i][j])
+        # print(str(lista_runda)+"\n")
+        lista_rezultate.append(lista_runda)
+        game_nr = int(file[-8])
+
+for i in range(len(lista_rezultate)):
+    if i >=0 and i <=8:
+        file_writer = open("G:\GitHub Repositories\CAVA_Project_1\TEMA_1\solutii_proprii\\"+str(game_nr)+"_0"+str(i+1)+".txt","w")
+    else:
+        file_writer = open("G:\GitHub Repositories\CAVA_Project_1\TEMA_1\solutii_proprii\\"+str(game_nr)+"_"+str(i+1)+".txt","w")
+    for element in lista_rezultate[i]:
+        file_writer.write(element+"\n")
+    file_writer.close
 
