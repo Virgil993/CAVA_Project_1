@@ -1,0 +1,5 @@
+1K D
+2K E
+3K D
+4K A
+5K R

@@ -2,11 +2,9 @@ import cv2 as cv
 import numpy as np
 import os
 
-path_solutii_proprii = "D:\Materiale Pentru Facultate\Concepte Si Aplicatii in Vederea Artificiala\CAVA_Project_1\TEMA_1\solutii_proprii\\"
+path_solutii = "D:\Materiale Pentru Facultate\Concepte Si Aplicatii in Vederea Artificiala\CAVA_Project_1\TEMA_1\solutii_totale\\"
 path_antrenare = "D:\Materiale Pentru Facultate\Concepte Si Aplicatii in Vederea Artificiala\CAVA_Project_1\TEMA_1\\antrenare\\"
-path_templates = "D:\Materiale Pentru Facultate\Concepte Si Aplicatii in Vederea Artificiala\CAVA_Project_1\TEMA_1\\templates\\"
-path_templates_noi="D:\Materiale Pentru Facultate\Concepte Si Aplicatii in Vederea Artificiala\CAVA_Project_1\TEMA_1\\templates_noi\\"
-path_solutii_proprii_noi = "D:\Materiale Pentru Facultate\Concepte Si Aplicatii in Vederea Artificiala\CAVA_Project_1\TEMA_1\solutii_noi\\"
+path_templates = "D:\Materiale Pentru Facultate\Concepte Si Aplicatii in Vederea Artificiala\CAVA_Project_1\TEMA_1\\templates_totale\\"
 
 
 def show_image(title, image):
@@ -111,11 +109,6 @@ def vizualizare_configuratie(result,matrix,lines_horizontal,lines_vertical):
             if matrix[i][j] == 'x': 
                 cv.rectangle(result, (y_min, x_min), (y_max, x_max), color=(255, 0, 0), thickness=5)
 
-alfabet = ["A","B","C","D","E","F","G","H","I","J","L","M","N","O","P","R","S","T","U","V","X","Z","0"]
-nr2 = len(alfabet)
-for j in range(nr2):
-    alfabet.append(alfabet[j]+"2")
-
 def clasifica_litera(patch,path_temp):
         maxi=-np.inf
         litera=""
@@ -206,109 +199,56 @@ dictionar_poz_litera = {}
 for i in range(15):
     dictionar_poz_litera[i+1]=chr(ord('A')+i)
 
-print(dictionar_poz_litera)
 
 
-matrice_viz = np.zeros((15,15),dtype=int)
-lista_rezultate = []
-files=os.listdir(path_antrenare)
-game_nr= 1
-for file in files:
-    break
-    if file[-3:]=='jpg':
-        if(file[-6:] == "01.jpg"):
-            matrice_viz = np.zeros((15,15),dtype=int)
-            if(len(lista_rezultate)!=0):
-                for i in range(len(lista_rezultate)):
-                    if i >=0 and i <=8:
-                        file_writer = open(path_solutii_proprii+str(game_nr)+"_0"+str(i+1)+".txt","w")
-                    else:
-                        file_writer = open(path_solutii_proprii+str(game_nr)+"_"+str(i+1)+".txt","w")
-                    for element in lista_rezultate[i]:
-                        file_writer.write(element+"\n")
-                    file_writer.close
-            lista_rezultate = []
-        # if(file[-6:] == "20.jpg"):
-        #     break
-        lista_runda = []
-        img = cv.imread(path_antrenare+file)
-        result=extrage_careu(img)
-        low_yellow = (0, 0, 239)
-        high_yellow = (255, 111, 255)
-        img_hsv = cv.cvtColor(result.copy(), cv.COLOR_BGR2HSV)
-        mask_yellow_hsv = cv.inRange(img_hsv, low_yellow, high_yellow)
-        matrice=determina_configuratie_careu_olitere(mask_yellow_hsv,lines_horizontal,lines_vertical,result)
-        for i in range(15):
-            for j in range(15):
-                if(matrice[i][j]!='o'):
-                    if(matrice_viz[i][j]==0):
-                        matrice_viz[i][j]=1
-                        if matrice[i][j] == "0":
-                            lista_runda.append(str(i+1)+dictionar_poz_litera[j+1]+" "+"?")
+def scrie_rezultate(path_train,path_sol,path_temp):
+    matrice_viz = np.zeros((15,15),dtype=int)
+    lista_rezultate = []
+    files=os.listdir(path_train)
+    game_nr= 1
+    for file in files:
+        if file[-3:]=='jpg':
+            if(file[-6:] == "01.jpg"):
+                matrice_viz = np.zeros((15,15),dtype=int)
+                if(len(lista_rezultate)!=0):
+                    for i in range(len(lista_rezultate)):
+                        if i >=0 and i <=8:
+                            file_writer = open(path_sol+str(game_nr)+"_0"+str(i+1)+".txt","w")
                         else:
-                            lista_runda.append(str(i+1)+dictionar_poz_litera[j+1]+" "+matrice[i][j])
-        # print(str(lista_runda)+"\n")
-        lista_rezultate.append(lista_runda)
-        game_nr = int(file[-8])
+                            file_writer = open(path_sol+str(game_nr)+"_"+str(i+1)+".txt","w")
+                        for element in lista_rezultate[i]:
+                            file_writer.write(element+"\n")
+                        file_writer.close
+                lista_rezultate = []
+            # if(file[-6:] == "20.jpg"):
+            #     break
+            lista_runda = []
+            img = cv.imread(path_train+file)
+            result=extrage_careu(img)
+            low_yellow = (0, 0, 239)
+            high_yellow = (255, 111, 255)
+            img_hsv = cv.cvtColor(result.copy(), cv.COLOR_BGR2HSV)
+            mask_yellow_hsv = cv.inRange(img_hsv, low_yellow, high_yellow)
+            matrice=determina_configuratie_careu_olitere(mask_yellow_hsv,lines_horizontal,lines_vertical,result,path_temp)
+            for i in range(15):
+                for j in range(15):
+                    if(matrice[i][j]!='o'):
+                        if(matrice_viz[i][j]==0):
+                            matrice_viz[i][j]=1
+                            if matrice[i][j] == "0":
+                                lista_runda.append(str(i+1)+dictionar_poz_litera[j+1]+" "+"?")
+                            else:
+                                lista_runda.append(str(i+1)+dictionar_poz_litera[j+1]+" "+matrice[i][j])
+            # print(str(lista_runda)+"\n")
+            lista_rezultate.append(lista_runda)
+            game_nr = int(file[-8])
+    for i in range(len(lista_rezultate)):
+        if i >=0 and i <=8:
+            file_writer = open(path_sol+str(game_nr)+"_0"+str(i+1)+".txt","w")
+        else:
+            file_writer = open(path_sol+str(game_nr)+"_"+str(i+1)+".txt","w")
+        for element in lista_rezultate[i]:
+            file_writer.write(element+"\n")
+        file_writer.close
 
-# for i in range(len(lista_rezultate)):
-#     if i >=0 and i <=8:
-#         file_writer = open(path_solutii_proprii+str(game_nr)+"_0"+str(i+1)+".txt","w")
-#     else:
-#         file_writer = open(path_solutii_proprii+str(game_nr)+"_"+str(i+1)+".txt","w")
-#     for element in lista_rezultate[i]:
-#         file_writer.write(element+"\n")
-#     file_writer.close
-
-
-
-
-# matrice_viz = np.zeros((15,15),dtype=int)
-# lista_rezultate = []
-# files=os.listdir(path_antrenare)
-# game_nr= 1
-# for file in files:
-#     if file[-3:]=='jpg':
-#         if(file[-6:] == "01.jpg"):
-#             matrice_viz = np.zeros((15,15),dtype=int)
-#             if(len(lista_rezultate)!=0):
-#                 for i in range(len(lista_rezultate)):
-#                     if i >=0 and i <=8:
-#                         file_writer = open(path_solutii_proprii_noi+str(game_nr)+"_0"+str(i+1)+".txt","w")
-#                     else:
-#                         file_writer = open(path_solutii_proprii_noi+str(game_nr)+"_"+str(i+1)+".txt","w")
-#                     for element in lista_rezultate[i]:
-#                         file_writer.write(element+"\n")
-#                     file_writer.close
-#             lista_rezultate = []
-#         # if(file[-6:] == "20.jpg"):
-#         #     break
-#         lista_runda = []
-#         img = cv.imread(path_antrenare+file)
-#         result=extrage_careu(img)
-#         low_yellow = (0, 0, 239)
-#         high_yellow = (255, 111, 255)
-#         img_hsv = cv.cvtColor(result.copy(), cv.COLOR_BGR2HSV)
-#         mask_yellow_hsv = cv.inRange(img_hsv, low_yellow, high_yellow)
-#         matrice=determina_configuratie_careu_olitere(mask_yellow_hsv,lines_horizontal,lines_vertical,result,path_templates_noi)
-#         for i in range(15):
-#             for j in range(15):
-#                 if(matrice[i][j]!='o'):
-#                     if(matrice_viz[i][j]==0):
-#                         matrice_viz[i][j]=1
-#                         if matrice[i][j] == "0":
-#                             lista_runda.append(str(i+1)+dictionar_poz_litera[j+1]+" "+"?")
-#                         else:
-#                             lista_runda.append(str(i+1)+dictionar_poz_litera[j+1]+" "+matrice[i][j])
-#         # print(str(lista_runda)+"\n")
-#         lista_rezultate.append(lista_runda)
-#         game_nr = int(file[-8])
-
-# for i in range(len(lista_rezultate)):
-#     if i >=0 and i <=8:
-#         file_writer = open(path_solutii_proprii_noi+str(game_nr)+"_0"+str(i+1)+".txt","w")
-#     else:
-#         file_writer = open(path_solutii_proprii_noi+str(game_nr)+"_"+str(i+1)+".txt","w")
-#     for element in lista_rezultate[i]:
-#         file_writer.write(element+"\n")
-#     file_writer.close
+scrie_rezultate(path_antrenare,path_solutii,path_templates)
