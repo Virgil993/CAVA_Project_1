@@ -67,18 +67,17 @@ def compare_annotations(filename_predicted,filename_gt,verbose=0):
 	return points_positions, points_letters,points_score
 
 #change this on your machine pointing to your results (txt files)
-predictions_path_root = "/Users/bogdan/Dropbox/CAVA-scrabble/CAVA-2022-TEMA1/evaluare/fisiere_solutie/331_Alexe_Bogdan/"
+predictions_path_root = "D:\Materiale Pentru Facultate\Concepte Si Aplicatii in Vederea Artificiala\CAVA_Project_1\TEMA_1\solutii_proprii\\"
 
 #change this on your machine to point to the ground-truth test
-gt_path_root = "/Users/bogdan/Dropbox/CAVA-scrabble/CAVA-2022-TEMA1/antrenare/"
+gt_path_root = "D:\Materiale Pentru Facultate\Concepte Si Aplicatii in Vederea Artificiala\CAVA_Project_1\TEMA_1\evaluare\\fisiere_solutie\\331_Alexe_Bogdan\\"
 
 
 #change this to 1 if you want to print results at each turn
-verbose = 1
+verbose = 0
 total_points = 0
 for game in range(1,6):
 	for turn in range(1,21):
-		
 		name_turn = str(turn)
 		if(turn< 10):
 			name_turn = '0'+str(turn)
@@ -95,8 +94,8 @@ for game in range(1,6):
 			points_position, points_letters, points_score = compare_annotations(filename_predicted,filename_gt,verbose)
 		except:
 			print("For image: ", game_turn, " encountered an error")
-
 		print("Image: ", game_turn, "Points position: ", points_position, "Points letters: ",points_letters, "Points score: ", points_score)
 		total_points = total_points + points_position + points_letters + points_score
 
 print(total_points)
+
