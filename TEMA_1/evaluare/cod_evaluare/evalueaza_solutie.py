@@ -67,10 +67,10 @@ def compare_annotations(filename_predicted,filename_gt,verbose=0):
 	return points_positions, points_letters,points_score
 
 #change this on your machine pointing to your results (txt files)
-predictions_path_root = "D:\Materiale Pentru Facultate\Concepte Si Aplicatii in Vederea Artificiala\CAVA_Project_1\TEMA_1\solutii_scor\\"
+predictions_path_root = "G:\GitHub Repositories\CAVA_Project_1\TEMA_1\solutii_scor\\"
 
 #change this on your machine to point to the ground-truth test
-gt_path_root = "D:\Materiale Pentru Facultate\Concepte Si Aplicatii in Vederea Artificiala\CAVA_Project_1\TEMA_1\evaluare\\fisiere_solutie\\331_Alexe_Bogdan\\"
+gt_path_root = "G:\GitHub Repositories\CAVA_Project_1\TEMA_1\\antrenare\\"
 
 
 #change this to 1 if you want to print results at each turn

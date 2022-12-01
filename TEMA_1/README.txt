@@ -1,25 +1,21 @@
-Your project should include a README file containing the following information:
+1. The libraries required to run the project including the full version of each library
 
-1. the libraries required to run the project including the full version of each library
+python == 3.9.15
+numpy == 1.23.4
+opencv-python == 4.6.0.66
 
-Example:
+2. how to run each task and where to look for the output file
 
-numpy==1.15.4
-opencv_python==4.1.1.26
-scikit_image==0.15.0
-tensorflow_gpu==1.12.0
-Pillow==7.0.0
-scikit_learn==0.22.1
-skimage==0.0
-tensorflow==2.1.0
+task 1:
+script: TEMA_1.py
+at the top of the script , at lines 5-17 there is a description on how to
+properly replace the three paths to make the script work. There are 3 paths that need to be customized for each machine. 
+path_solutii: the path where the solutions files will be created
 
-2. how to run each task and where to look for the output file.
+path_antrenare: the path from where the program will read the images and procces them to create the solutions files.
 
-Example:
+path_templates: the path from where the program will read the templates for each piece. In the project folder you will also find a folder called templates which contains the best handpicked templates to use for this project.
 
-Task 1: 
-script: task_1.py
-function: run_task1(input_folder_name), where input_folder_name is the path to the folder containing the images for task1
-output: the output file is results/task1.txt
+After all these paths are properly configured, the script can be run and the solutions files will be created in the folder that is specified in path_solutii.
+From then on, this folder path can be used in evalueaza_solutii.py to check the solutions. The script takes about 1 minute to run.
 
-Task 2: ...

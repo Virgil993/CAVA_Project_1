@@ -2,9 +2,19 @@ import cv2 as cv
 import numpy as np
 import os
 
-path_solutii = "D:\Materiale Pentru Facultate\Concepte Si Aplicatii in Vederea Artificiala\CAVA_Project_1\TEMA_1\solutii_scor\\"
-path_antrenare = "D:\Materiale Pentru Facultate\Concepte Si Aplicatii in Vederea Artificiala\CAVA_Project_1\TEMA_1\\antrenare\\"
-path_templates = "D:\Materiale Pentru Facultate\Concepte Si Aplicatii in Vederea Artificiala\CAVA_Project_1\TEMA_1\\templates\\"
+# mai jos sunt pathurile ce trebuie inlocuite pe fiecare masina cu path-ul potrivit
+# atentie la separatorul \ din path deoarece unele combinatii \t sau \n pot 
+# face ca pathul sa fie invalid, atunci cand se intampla asta, doar inlocuiti \ cu \\
+# de asemenea path-ul trebuie sa mai aiba la final un \\ ca programul sa functioneze cum trebuie
+
+# pathul unde sunt stocate solutiile ce vor fi testate in evalueaza_solutie.py
+path_solutii = "G:\GitHub Repositories\CAVA_Project_1\TEMA_1\solutii_scor\\"
+
+# pathul in care se afla imaginiile de antrenare
+path_antrenare = "G:\GitHub Repositories\CAVA_Project_1\TEMA_1\\antrenare\\"
+
+# pathul unde sunt stocate templates-urile oferite in folder-ul templates
+path_templates = "G:\GitHub Repositories\CAVA_Project_1\TEMA_1\\templates\\"
 
 
 def show_image(title, image):
@@ -434,8 +444,6 @@ def scrie_rezultate(path_train,path_sol,path_temp):
     game_nr= 1
     matrice_anterioara=matrice_initiala
     for file in files:
-        # if(file[-8:] != "3_05.jpg" and file[-8:] != "3_06.jpg"):
-        #         continue
         if file[-3:]=='jpg':
             if(file[-6:] == "01.jpg"):
                 matrice_viz = np.zeros((15,15),dtype=int)
