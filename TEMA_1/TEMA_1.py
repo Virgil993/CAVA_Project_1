@@ -8,10 +8,10 @@ import os
 # de asemenea path-ul trebuie sa mai aiba la final un \\ ca programul sa functioneze cum trebuie
 
 # pathul unde sunt stocate solutiile ce vor fi testate in evalueaza_solutie.py
-path_solutii = "G:\GitHub Repositories\CAVA_Project_1\TEMA_1\solutii_scor\\"
+path_solutii = "G:\GitHub Repositories\CAVA_Project_1\TEMA_1\Solutii_finale\\"
 
 # pathul in care se afla imaginiile de antrenare
-path_antrenare = "G:\GitHub Repositories\CAVA_Project_1\TEMA_1\\antrenare\\"
+path_antrenare = "G:\GitHub Repositories\CAVA_Project_1\Testare_finala\\"
 
 # pathul unde sunt stocate templates-urile oferite in folder-ul templates
 path_templates = "G:\GitHub Repositories\CAVA_Project_1\TEMA_1\\templates\\"
